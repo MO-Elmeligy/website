@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HeroSection extends StatelessWidget {
-  const HeroSection({super.key});
+  final ScrollController? scrollController;
+  
+  const HeroSection({super.key, this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +14,7 @@ class HeroSection extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Profile Image Placeholder
+          // Profile Image
           Container(
             width: 200,
             height: 200,
@@ -20,18 +23,28 @@ class HeroSection extends StatelessWidget {
               border: Border.all(color: Colors.white, width: 4),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
               ],
             ),
-            child: const CircleAvatar(
-              backgroundColor: Colors.white24,
-              child: Icon(
-                Icons.person,
-                size: 100,
-                color: Colors.white,
+            child: ClipOval(
+              child: Image.asset(
+                'assets/images/mohamed_profile.jpg',
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const CircleAvatar(
+                    backgroundColor: Colors.white24,
+                    child: Icon(
+                      Icons.person,
+                      size: 100,
+                      color: Colors.white,
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -88,7 +101,7 @@ class HeroSection extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  // Scroll to projects section
+                  _scrollToSection(2); // Projects section
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.pinkAccent,
@@ -108,7 +121,7 @@ class HeroSection extends StatelessWidget {
               
               OutlinedButton(
                 onPressed: () {
-                  // Scroll to contact section
+                  _scrollToSection(4); // Contact section
                 },
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -135,21 +148,21 @@ class HeroSection extends StatelessWidget {
               _SocialButton(
                 icon: Icons.code,
                 onTap: () {
-                  // Open GitHub
+                  _openGitHub();
                 },
               ),
               const SizedBox(width: 20),
               _SocialButton(
                 icon: Icons.work,
                 onTap: () {
-                  // Open LinkedIn
+                  _openLinkedIn();
                 },
               ),
               const SizedBox(width: 20),
               _SocialButton(
                 icon: Icons.email,
                 onTap: () {
-                  // Open Email
+                  _openEmail();
                 },
               ),
             ],
@@ -157,6 +170,51 @@ class HeroSection extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _scrollToSection(int index) {
+    if (scrollController != null) {
+      final sections = [
+        0.0, // Hero
+        800.0, // About
+        1600.0, // Projects
+        2400.0, // Skills
+        3200.0, // Contact
+      ];
+
+      if (index < sections.length) {
+        scrollController!.animateTo(
+          sections[index],
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
+  }
+
+  void _openGitHub() async {
+    final Uri url = Uri.parse('https://github.com/MO-Elmeligy');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    }
+  }
+
+  void _openLinkedIn() async {
+    final Uri url = Uri.parse('https://www.linkedin.com/in/mohamed-elmeligy-574b06260');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    }
+  }
+
+  void _openEmail() async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: 'wasdmagneto17@gmail.com',
+      query: 'subject=Portfolio Inquiry&body=Hello Mohamed, I would like to discuss...',
+    );
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri);
+    }
   }
 }
 

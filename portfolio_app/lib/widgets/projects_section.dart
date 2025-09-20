@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/project.dart';
+import 'real_project_image.dart';
 
 class ProjectsSection extends StatelessWidget {
   const ProjectsSection({super.key});
@@ -60,24 +61,24 @@ class ProjectsSection extends StatelessWidget {
     return [
       const Project(
         title: 'Movie App',
-        description: 'A comprehensive movie application built with Flutter and TMDB API integration. Features modern UI design and BLoC state management for optimal performance.',
-        imageUrl: 'assets/images/movie_app.png',
+        description: 'Discover and explore movies with TMDB API integration. Modern UI with BLoC state management.',
+        imageUrl: 'assets/images/Screenshot 2025-08-02 000231.png',
         technologies: ['Flutter', 'Dart', 'BLoC', 'TMDB API', 'HTTP'],
         githubUrl: 'https://github.com/MO-Elmeligy/movie-app',
         category: 'Mobile App',
       ),
       const Project(
         title: 'BMI Calculator',
-        description: 'A clean and responsive Body Mass Index calculator app with intuitive UI design and real-time calculations.',
-        imageUrl: 'assets/images/bmi_app.png',
+        description: 'Calculate your Body Mass Index with a clean, intuitive interface and real-time results.',
+        imageUrl: 'assets/images/Screenshot 2025-08-02 000152.png',
         technologies: ['Flutter', 'Dart', 'Material Design'],
         githubUrl: 'https://github.com/MO-Elmeligy/bmi-calculator',
         category: 'Mobile App',
       ),
       const Project(
         title: 'Game Website',
-        description: 'A freelance project featuring a dynamic website for displaying player information with Firebase backend integration.',
-        imageUrl: 'assets/images/game_website.png',
+        description: 'Dynamic player information display with Firebase backend and real-time updates.',
+        imageUrl: 'assets/images/Screenshot 2025-09-20 155643.png',
         technologies: ['Flutter Web', 'Firebase', 'Real-time Database'],
         githubUrl: 'https://github.com/MO-Elmeligy/game-website',
         liveUrl: 'https://game-website-demo.web.app',
@@ -85,8 +86,8 @@ class ProjectsSection extends StatelessWidget {
       ),
       const Project(
         title: 'IoT Smart Controller',
-        description: 'An innovative Flutter app connected via Bluetooth to ESP32/HC-05 for controlling smart fan speed and cooking modes in real-time.',
-        imageUrl: 'assets/images/iot_controller.png',
+        description: 'Control smart devices via Bluetooth. ESP32 integration for fan speed and cooking modes.',
+        imageUrl: 'assets/images/WhatsApp Image 2025-09-20 at 16.11.21_e2fea6d5.jpg',
         technologies: ['Flutter', 'Bluetooth', 'ESP32', 'Arduino', 'IoT'],
         githubUrl: 'https://github.com/MO-Elmeligy/iot-smart-controller',
         category: 'IoT App',
@@ -117,16 +118,28 @@ class _ProjectCard extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.3),
+                color: Colors.grey.withValues(alpha: 0.3),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
                 ),
               ),
-              child: const Icon(
-                Icons.image,
-                size: 60,
-                color: Colors.white54,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                ),
+                child: Image.asset(
+                  project.imageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return RealProjectImage(
+                      projectTitle: project.title,
+                      category: project.category,
+                      description: project.description,
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -261,4 +274,6 @@ class _ProjectCard extends StatelessWidget {
       ),
     );
   }
+
 }
+
