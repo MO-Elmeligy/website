@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/project.dart';
 import 'real_project_image.dart';
 
@@ -8,9 +9,15 @@ class ProjectsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final projects = _getProjects();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+    final isTablet = screenWidth >= 768 && screenWidth < 1024;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : isTablet ? 24 : 32, 
+        vertical: isMobile ? 60 : 80
+      ),
       child: Column(
         children: [
           // Section Title
@@ -19,15 +26,15 @@ class ProjectsSection extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 42,
+              fontSize: isMobile ? 32 : isTablet ? 36 : 42,
             ),
             textAlign: TextAlign.center,
           ),
           
-          const SizedBox(height: 20),
+          SizedBox(height: isMobile ? 15 : 20),
           
           Container(
-            width: 100,
+            width: isMobile ? 80 : 100,
             height: 4,
             decoration: BoxDecoration(
               color: Colors.pinkAccent,
@@ -35,17 +42,17 @@ class ProjectsSection extends StatelessWidget {
             ),
           ),
           
-          const SizedBox(height: 60),
+          SizedBox(height: isMobile ? 40 : 60),
           
           // Projects Grid
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-              childAspectRatio: 1.2,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: isMobile ? 1 : isTablet ? 2 : 2,
+              crossAxisSpacing: isMobile ? 0 : 20,
+              mainAxisSpacing: isMobile ? 20 : 20,
+              childAspectRatio: isMobile ? 1.5 : isTablet ? 1.3 : 1.2,
             ),
             itemCount: projects.length,
             itemBuilder: (context, index) {
@@ -228,9 +235,7 @@ class _ProjectCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ElevatedButton.icon(
-                          onPressed: () {
-                            // Open GitHub
-                          },
+                          onPressed: () => _launchGitHub(project.githubUrl),
                           icon: const Icon(Icons.code, size: 16),
                           label: const Text('Code'),
                           style: ElevatedButton.styleFrom(
@@ -248,9 +253,7 @@ class _ProjectCard extends StatelessWidget {
                         const SizedBox(width: 8),
                         Expanded(
                           child: OutlinedButton.icon(
-                            onPressed: () {
-                              // Open live demo
-                            },
+                            onPressed: () => _launchLiveDemo(project.liveUrl!),
                             icon: const Icon(Icons.open_in_new, size: 16),
                             label: const Text('Live'),
                             style: OutlinedButton.styleFrom(
@@ -275,5 +278,22 @@ class _ProjectCard extends StatelessWidget {
     );
   }
 
+  Future<void> _launchGitHub(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      print('Could not launch $url');
+    }
+  }
+
+  Future<void> _launchLiveDemo(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      print('Could not launch $url');
+    }
+  }
 }
 

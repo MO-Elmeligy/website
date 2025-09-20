@@ -8,16 +8,24 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isMobile = screenWidth < 768;
+    final isTablet = screenWidth >= 768 && screenWidth < 1024;
+    
     return Container(
-      height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      height: screenHeight,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : isTablet ? 32 : 48,
+        vertical: isMobile ? 20 : 40,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Profile Image
           Container(
-            width: 200,
-            height: 200,
+            width: isMobile ? 150 : isTablet ? 180 : 200,
+            height: isMobile ? 150 : isTablet ? 180 : 200,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 4),
@@ -29,11 +37,11 @@ class HeroSection extends StatelessWidget {
                 ),
               ],
             ),
-            child: ClipOval(
+              child: ClipOval(
               child: Image.asset(
                 'assets/images/mohamed_profile.jpg',
-                width: 200,
-                height: 200,
+                width: isMobile ? 150 : isTablet ? 180 : 200,
+                height: isMobile ? 150 : isTablet ? 180 : 200,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return const CircleAvatar(
@@ -49,7 +57,7 @@ class HeroSection extends StatelessWidget {
             ),
           ),
           
-          const SizedBox(height: 40),
+          SizedBox(height: isMobile ? 30 : 40),
           
           // Name
           Text(
@@ -57,7 +65,7 @@ class HeroSection extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              fontSize: 48,
+              fontSize: isMobile ? 32 : isTablet ? 40 : 48,
               shadows: [
                 Shadow(
                   color: Colors.black.withOpacity(0.5),
@@ -68,78 +76,128 @@ class HeroSection extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           
-          const SizedBox(height: 20),
+          SizedBox(height: isMobile ? 15 : 20),
           
           // Title
           Text(
             'Flutter Developer',
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               color: Colors.white70,
-              fontSize: 24,
+              fontSize: isMobile ? 18 : isTablet ? 20 : 24,
               fontWeight: FontWeight.w300,
             ),
             textAlign: TextAlign.center,
           ),
           
-          const SizedBox(height: 10),
+          SizedBox(height: isMobile ? 8 : 10),
           
           // Subtitle
           Text(
-            'Mobile & Web Development • IoT Integration • Clean Architecture',
+            isMobile 
+              ? 'Mobile & Web Development\nIoT Integration • Clean Architecture'
+              : 'Mobile & Web Development • IoT Integration • Clean Architecture',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: Colors.white60,
-              fontSize: 16,
+              fontSize: isMobile ? 14 : isTablet ? 15 : 16,
             ),
             textAlign: TextAlign.center,
           ),
           
-          const SizedBox(height: 50),
+          SizedBox(height: isMobile ? 30 : 50),
           
           // CTA Buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  _scrollToSection(2); // Projects section
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pinkAccent,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+          isMobile 
+            ? Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _scrollToSection(2); // Projects section
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pinkAccent,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text(
+                        'View My Work',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'View My Work',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-              ),
-              
-              const SizedBox(width: 20),
-              
-              OutlinedButton(
-                onPressed: () {
-                  _scrollToSection(4); // Contact section
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.white, width: 2),
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                  
+                  const SizedBox(height: 15),
+                  
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        _scrollToSection(4); // Contact section
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        side: const BorderSide(color: Colors.white, width: 2),
+                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text(
+                        'Get In Touch',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'Get In Touch',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _scrollToSection(2); // Projects section
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pinkAccent,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text(
+                      'View My Work',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  
+                  const SizedBox(width: 20),
+                  
+                  OutlinedButton(
+                    onPressed: () {
+                      _scrollToSection(4); // Contact section
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.white, width: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text(
+                      'Get In Touch',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
           
-          const SizedBox(height: 30),
+          SizedBox(height: isMobile ? 20 : 30),
           
           // Social Links
           Row(

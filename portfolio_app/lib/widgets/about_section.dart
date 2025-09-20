@@ -5,8 +5,15 @@ class AboutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+    final isTablet = screenWidth >= 768 && screenWidth < 1024;
+    
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : isTablet ? 24 : 32, 
+        vertical: isMobile ? 60 : 80
+      ),
       child: Column(
         children: [
           // Section Title
@@ -15,15 +22,15 @@ class AboutSection extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 42,
+              fontSize: isMobile ? 32 : isTablet ? 36 : 42,
             ),
             textAlign: TextAlign.center,
           ),
           
-          const SizedBox(height: 20),
+          SizedBox(height: isMobile ? 15 : 20),
           
           Container(
-            width: 100,
+            width: isMobile ? 80 : 100,
             height: 4,
             decoration: BoxDecoration(
               color: Colors.pinkAccent,
@@ -31,115 +38,218 @@ class AboutSection extends StatelessWidget {
             ),
           ),
           
-          const SizedBox(height: 60),
+          SizedBox(height: isMobile ? 40 : 60),
           
           // Content
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Text Content
-              Expanded(
-                flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Passionate Flutter Developer',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
+          isMobile 
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Text Content
+                  Text(
+                    'Passionate Flutter Developer',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: isMobile ? 24 : 28,
+                    ),
+                  ),
+                  
+                  SizedBox(height: isMobile ? 15 : 20),
+                  
+                  Text(
+                    'I am a passionate Flutter developer with expertise in creating beautiful, '
+                    'responsive mobile and web applications. With a strong foundation in Dart '
+                    'programming and modern software architecture principles, I specialize in '
+                    'building scalable applications that deliver exceptional user experiences.',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.white70,
+                      fontSize: isMobile ? 14 : 16,
+                      height: 1.6,
+                    ),
+                  ),
+                  
+                  SizedBox(height: isMobile ? 20 : 30),
+                  
+                  Text(
+                    'My journey in mobile development has led me to work on diverse projects '
+                    'ranging from entertainment apps to IoT solutions. I believe in clean code, '
+                    'SOLID principles, and creating applications that not only meet requirements '
+                    'but exceed expectations.',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.white70,
+                      fontSize: isMobile ? 14 : 16,
+                      height: 1.6,
+                    ),
+                  ),
+                  
+                  SizedBox(height: isMobile ? 30 : 40),
+                  
+                  // Key Points
+                  _KeyPoint(
+                    icon: Icons.mobile_friendly,
+                    title: 'Mobile & Web Development',
+                    description: 'Flutter applications for iOS, Android, and Web platforms',
+                  ),
+                  
+                  SizedBox(height: isMobile ? 15 : 20),
+                  
+                  _KeyPoint(
+                    icon: Icons.architecture,
+                    title: 'Clean Architecture',
+                    description: 'SOLID principles and maintainable code structure',
+                  ),
+                  
+                  SizedBox(height: isMobile ? 15 : 20),
+                  
+                  _KeyPoint(
+                    icon: Icons.smart_toy,
+                    title: 'IoT Integration',
+                    description: 'ESP32, Arduino, and Bluetooth connectivity solutions',
+                  ),
+                  
+                  SizedBox(height: isMobile ? 30 : 40),
+                  
+                  // Stats/Highlights for Mobile
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _StatCard(
+                          number: '4+',
+                          label: 'Projects',
+                          icon: Icons.work_outline,
+                        ),
                       ),
-                    ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    Text(
-                      'I am a passionate Flutter developer with expertise in creating beautiful, '
-                      'responsive mobile and web applications. With a strong foundation in Dart '
-                      'programming and modern software architecture principles, I specialize in '
-                      'building scalable applications that deliver exceptional user experiences.',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.white70,
-                        fontSize: 16,
-                        height: 1.6,
+                      
+                      SizedBox(width: isMobile ? 10 : 20),
+                      
+                      Expanded(
+                        child: _StatCard(
+                          number: '2+',
+                          label: 'Years Exp',
+                          icon: Icons.trending_up,
+                        ),
                       ),
-                    ),
-                    
-                    const SizedBox(height: 30),
-                    
-                    Text(
-                      'My journey in mobile development has led me to work on diverse projects '
-                      'ranging from entertainment apps to IoT solutions. I believe in clean code, '
-                      'SOLID principles, and creating applications that not only meet requirements '
-                      'but exceed expectations.',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.white70,
-                        fontSize: 16,
-                        height: 1.6,
+                      
+                      SizedBox(width: isMobile ? 10 : 20),
+                      
+                      Expanded(
+                        child: _StatCard(
+                          number: '100%',
+                          label: 'Satisfaction',
+                          icon: Icons.star,
+                        ),
                       ),
+                    ],
+                  ),
+                ],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Text Content
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Passionate Flutter Developer',
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28,
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 20),
+                        
+                        Text(
+                          'I am a passionate Flutter developer with expertise in creating beautiful, '
+                          'responsive mobile and web applications. With a strong foundation in Dart '
+                          'programming and modern software architecture principles, I specialize in '
+                          'building scalable applications that deliver exceptional user experiences.',
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Colors.white70,
+                            fontSize: 16,
+                            height: 1.6,
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 30),
+                        
+                        Text(
+                          'My journey in mobile development has led me to work on diverse projects '
+                          'ranging from entertainment apps to IoT solutions. I believe in clean code, '
+                          'SOLID principles, and creating applications that not only meet requirements '
+                          'but exceed expectations.',
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Colors.white70,
+                            fontSize: 16,
+                            height: 1.6,
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 40),
+                        
+                        // Key Points
+                        _KeyPoint(
+                          icon: Icons.mobile_friendly,
+                          title: 'Mobile & Web Development',
+                          description: 'Flutter applications for iOS, Android, and Web platforms',
+                        ),
+                        
+                        const SizedBox(height: 20),
+                        
+                        _KeyPoint(
+                          icon: Icons.architecture,
+                          title: 'Clean Architecture',
+                          description: 'SOLID principles and maintainable code structure',
+                        ),
+                        
+                        const SizedBox(height: 20),
+                        
+                        _KeyPoint(
+                          icon: Icons.smart_toy,
+                          title: 'IoT Integration',
+                          description: 'ESP32, Arduino, and Bluetooth connectivity solutions',
+                        ),
+                      ],
                     ),
-                    
-                    const SizedBox(height: 40),
-                    
-                    // Key Points
-                    _KeyPoint(
-                      icon: Icons.mobile_friendly,
-                      title: 'Mobile & Web Development',
-                      description: 'Flutter applications for iOS, Android, and Web platforms',
+                  ),
+                  
+                  const SizedBox(width: 60),
+                  
+                  // Stats/Highlights
+                  Expanded(
+                    child: Column(
+                      children: [
+                        _StatCard(
+                          number: '4+',
+                          label: 'Projects Completed',
+                          icon: Icons.work_outline,
+                        ),
+                        
+                        const SizedBox(height: 20),
+                        
+                        _StatCard(
+                          number: '2+',
+                          label: 'Years Experience',
+                          icon: Icons.trending_up,
+                        ),
+                        
+                        const SizedBox(height: 20),
+                        
+                        _StatCard(
+                          number: '100%',
+                          label: 'Client Satisfaction',
+                          icon: Icons.star,
+                        ),
+                      ],
                     ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    _KeyPoint(
-                      icon: Icons.architecture,
-                      title: 'Clean Architecture',
-                      description: 'SOLID principles and maintainable code structure',
-                    ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    _KeyPoint(
-                      icon: Icons.smart_toy,
-                      title: 'IoT Integration',
-                      description: 'ESP32, Arduino, and Bluetooth connectivity solutions',
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              
-              const SizedBox(width: 60),
-              
-              // Stats/Highlights
-              Expanded(
-                child: Column(
-                  children: [
-                    _StatCard(
-                      number: '4+',
-                      label: 'Projects Completed',
-                      icon: Icons.work_outline,
-                    ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    _StatCard(
-                      number: '2+',
-                      label: 'Years Experience',
-                      icon: Icons.trending_up,
-                    ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    _StatCard(
-                      number: '100%',
-                      label: 'Client Satisfaction',
-                      icon: Icons.star,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
         ],
       ),
     );

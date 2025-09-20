@@ -63,9 +63,15 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+    
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : 20, 
+        vertical: isMobile ? 12 : 15
+      ),
       decoration: BoxDecoration(
         color: isScrolled 
             ? Colors.black.withOpacity(0.8)
@@ -85,9 +91,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
         children: [
           // Logo/Name
           Text(
-            'Mohamed Elmeligy',
+            isMobile ? 'M.Elmeligy' : 'Mohamed Elmeligy',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: isMobile ? 18 : 20,
               fontWeight: FontWeight.bold,
               color: Colors.white,
               shadows: [
@@ -100,32 +106,85 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
           ),
           
           // Navigation Items
-          Row(
-            children: [
-              _NavItem(
-                label: 'Home',
-                onTap: () => _scrollToSection(0),
+          isMobile 
+            ? _buildMobileMenu(context, isMobile)
+            : Row(
+                children: [
+                  _NavItem(
+                    label: 'Home',
+                    onTap: () => _scrollToSection(0),
+                  ),
+                  _NavItem(
+                    label: 'About',
+                    onTap: () => _scrollToSection(1),
+                  ),
+                  _NavItem(
+                    label: 'Projects',
+                    onTap: () => _scrollToSection(2),
+                  ),
+                  _NavItem(
+                    label: 'Skills',
+                    onTap: () => _scrollToSection(3),
+                  ),
+                  _NavItem(
+                    label: 'Contact',
+                    onTap: () => _scrollToSection(4),
+                  ),
+                ],
               ),
-              _NavItem(
-                label: 'About',
-                onTap: () => _scrollToSection(1),
-              ),
-              _NavItem(
-                label: 'Projects',
-                onTap: () => _scrollToSection(2),
-              ),
-              _NavItem(
-                label: 'Skills',
-                onTap: () => _scrollToSection(3),
-              ),
-              _NavItem(
-                label: 'Contact',
-                onTap: () => _scrollToSection(4),
-              ),
-            ],
-          ),
         ],
       ),
+    );
+  }
+  
+  Widget _buildMobileMenu(BuildContext context, bool isMobile) {
+    return PopupMenuButton<String>(
+      icon: const Icon(
+        Icons.menu,
+        color: Colors.white,
+        size: 28,
+      ),
+      onSelected: (value) {
+        switch (value) {
+          case 'home':
+            _scrollToSection(0);
+            break;
+          case 'about':
+            _scrollToSection(1);
+            break;
+          case 'projects':
+            _scrollToSection(2);
+            break;
+          case 'skills':
+            _scrollToSection(3);
+            break;
+          case 'contact':
+            _scrollToSection(4);
+            break;
+        }
+      },
+      itemBuilder: (BuildContext context) => [
+        const PopupMenuItem<String>(
+          value: 'home',
+          child: Text('Home'),
+        ),
+        const PopupMenuItem<String>(
+          value: 'about',
+          child: Text('About'),
+        ),
+        const PopupMenuItem<String>(
+          value: 'projects',
+          child: Text('Projects'),
+        ),
+        const PopupMenuItem<String>(
+          value: 'skills',
+          child: Text('Skills'),
+        ),
+        const PopupMenuItem<String>(
+          value: 'contact',
+          child: Text('Contact'),
+        ),
+      ],
     );
   }
 }

@@ -7,9 +7,15 @@ class SkillsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final skills = _getSkills();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+    final isTablet = screenWidth >= 768 && screenWidth < 1024;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : isTablet ? 24 : 32, 
+        vertical: isMobile ? 60 : 80
+      ),
       child: Column(
         children: [
           // Section Title
@@ -18,15 +24,15 @@ class SkillsSection extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 42,
+              fontSize: isMobile ? 32 : isTablet ? 36 : 42,
             ),
             textAlign: TextAlign.center,
           ),
           
-          const SizedBox(height: 20),
+          SizedBox(height: isMobile ? 15 : 20),
           
           Container(
-            width: 100,
+            width: isMobile ? 80 : 100,
             height: 4,
             decoration: BoxDecoration(
               color: Colors.pinkAccent,
@@ -34,7 +40,7 @@ class SkillsSection extends StatelessWidget {
             ),
           ),
           
-          const SizedBox(height: 60),
+          SizedBox(height: isMobile ? 40 : 60),
           
           // Skills by Category
           ...skills.entries.map((entry) {
@@ -57,11 +63,11 @@ class SkillsSection extends StatelessWidget {
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 15,
-                    childAspectRatio: 2.5,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: isMobile ? 2 : isTablet ? 3 : 3,
+                    crossAxisSpacing: isMobile ? 10 : 15,
+                    mainAxisSpacing: isMobile ? 10 : 15,
+                    childAspectRatio: isMobile ? 2.2 : isTablet ? 2.3 : 2.5,
                   ),
                   itemCount: entry.value.length,
                   itemBuilder: (context, index) {
